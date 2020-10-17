@@ -4,17 +4,55 @@ var RoomsView = {
   $select: $('#rooms select'),
 
   initialize: function() {
-    //fetch data
-    //sort the data by room name
-    //store the room name as a list in rooms.js
+    //Rooms is our filtered data
 
-    //button to create a room should create a new room object
-    //able to input NEW roomname
-    //assign new messages.rooomname to be the NEW roomname
+    RoomsView.$select.empty();
+    for (var rm in Rooms) {
+      RoomsView.$select.append($('<option/>', {
+        text: rm,
+        value: rm
+      }));
+    }
+    RoomsView.$select.on('change', function(event) {
+      let currentRm = $(this).children('option:selected').val();
+      // console.log('What is currentRm', currentRm);
+      App.roomname = currentRm;
+      RoomsView.render(currentRm);
+    });
+    RoomsView.$button.on('click', function(event) {
+      // if ($roomInput) add & remove
+      var $roomInput = $('<input type="text" id="newRoomname"></input>');
+      if ($('input#newRoomname').length) { // grab input
+        var newRoomName = $('input#newRoomname').val();
+        console.log(newRoomName);
+        //add to option list
+        RoomsView.$select.append($('<option/>', {
+          text: newRoomName,
+          value: newRoomName
+        }));
+        App.roomname = newRoomName;
+        $('input#newRoomname').remove();
+      } else { // add input box
+        $roomInput.insertBefore('#rooms button');
+      }
+    });
+    //when click addRoom
+    //form pops up to input roomname
+
   },
 
-  render: function() {
-
+  render: function(currentRm) {
+    // know what room we're going to
+    // render messages in that room
+    if (currentRm === 'allMessages') {
+      MessagesView.render();
+      return;
+    }
+    MessagesView.$chats.empty();
+    for (let msgInRm of Rooms[currentRm]) {
+      let msgHtml = MessageView.render(msgInRm);
+      MessagesView.$chats.append(msgHtml);
+    }
   }
 
 };

@@ -21,9 +21,9 @@ var FormView = {
     let newMessage = {
       username: App.username,
       text: $text.val(),
-      roomname: 'lobbyString'
+      roomname: App.roomname,
     };
-    console.log(newMessage);
+    // console.log(newMessage);
     Parse.create(newMessage, () => {
       App.startSpinner();
       App.fetch(App.stopSpinner);
