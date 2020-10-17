@@ -1,4 +1,5 @@
 var Friends = {
+  $FriendsList: $('FriendsList')
 
 
 };

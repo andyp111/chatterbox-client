@@ -7,21 +7,30 @@ var App = {
   initialize: function() {
     App.username = window.location.search.substr(10);
 
-    FormView.initialize();
-    RoomsView.initialize();
-    MessagesView.initialize();
 
     // Fetch initial batch of messages
     App.startSpinner();
     App.fetch(App.stopSpinner);
 
+    FormView.initialize();
+
+    $('#refresh').on('click', function() {
+      App.startSpinner();
+      App.fetch(App.stopSpinner);
+    });
   },
+  //event listener
+  //when submit button is clicked, want to capture username, text, roomname
+  //pass data by calling create in Parse
 
   fetch: function(callback = ()=>{}) {
     Parse.readAll((data) => {
       // examine the response from the server request:
-      console.log(data);
-
+      // store data in messages
+      MessagesView.initialize(data);
+      console.log(Messages);
+      // call messagesView
+      MessagesView.render();
       callback();
     });
   },
